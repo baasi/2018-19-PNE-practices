@@ -10,7 +10,7 @@ def count_a(seq):
     return result
 
 #Main program
-s = "AGTACGATCGA"
+s = input("Type a sequence:  ")
 na = count_a(s)
 print("the number of As is: {}".format(na))
 
@@ -18,7 +18,10 @@ print("the number of As is: {}".format(na))
 tl = len(s)
 
 #Calculate the percentage of As in the sequence
-per = round(100.0 * na/ tl, 1)
+if tl > 0:
+    per = round(100.0 * na/ tl, 1)
+else:
+    per = 0
 
 print("The total length is: {}".format(tl))
 print("The percentage of As is: {}%".format(per))
