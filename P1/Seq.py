@@ -48,6 +48,8 @@ percc2 = round(c2 / l2, 2)
 percg2 = round(g2 / l2, 2)
 perct2 = round(t2 / l2, 2)
 
+xd = ''.join(reversed(comp1))
+
 print("Sequence 1: {}".format(str1))
 print("Sequence 2: {}".format(str2))
 
