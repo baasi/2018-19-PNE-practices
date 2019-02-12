@@ -1,0 +1,41 @@
+Here you will take your notes
+client-server model
+Client send a request to the server and the server response to the request of the client, like this with every client trying
+to connect to the server. If there is no request, nothing happens but if there is no server, there is nothing attending to
+the request so no response is produced. Client can be any device such as computers or phones. There can be more than one server running
+at the same time as well as a client can connect to more than one server.
+
+You can have a client connected to the server being both in that computer. Client and server are connected through a network (internet).
+Inside the internet there are isolated computers connected to each other, divided in groups called networks and if we want to send a message
+from C to S we need an IP adress, all computer connected to internet have a network interface and some of them more than one, each one correspond
+to a different IP so a Computer can have more than one IP adress cause they depend on the computer to which you are connected.
+
+IP adress of my phone:10.0.43.120 (connected to wireless urjc)
+IP adress of my home:
+IP of my computer today: 212.128.253.90
+IP of the teacher: 212.128.253.64
+
+Ping is a command that says if the computer is alive.
+
+ping time to 8.8.8.8:
+time=3.53 ms
+
+ping time to my computer's IP:
+time=0.054 ms
+
+ping time to a computer in my network:
+time=0.600 ms
+
+ping time to the network of my phone:
+time = 1690 ms
+
+URL = used to identify a computer interface for humans.
+
+ping time to google:216.58.211.228
+time=3.72 ms
+
+ping time to www.urjc.es:
+time=2.07 ms
+
+We need the IP adress to communicate to any server but if there are more than one application in a server. We can identify each app with the port
+number. Usually the main app has the number port 80, but the other ones has other numbers (e.x. 8080) THIS IS A TEXT EXAMPLE FOR ADDING TO MY FILE
