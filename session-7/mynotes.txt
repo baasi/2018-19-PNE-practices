@@ -39,3 +39,4 @@ time=2.07 ms
 
 We need the IP adress to communicate to any server but if there are more than one application in a server. We can identify each app with the port
 number. Usually the main app has the number port 80, but the other ones has other numbers (e.x. 8080) THIS IS A TEXT EXAMPLE FOR ADDING TO MY FILE
+THIS IS A TEXT EXAMPLE FOR ADDING TO MY FILE
