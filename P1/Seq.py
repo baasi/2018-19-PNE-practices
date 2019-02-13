@@ -7,37 +7,26 @@ class Seq:
     def len(self):
         return len(self.strbases)
 
-
-class Gene(Seq):
-    #this class is derived from the seq
-    #all the objects of class Gene will inheritage the methods from seq Class
-    pass
-
-def sequence():
-    s1 = Gene("ATTCGATCC")
-    s2 = Seq("AAACCTTTGG")
-
-    str1 = s1.strbases
-    str2 = s2.strbases
-
-    l1 = s1.len()
-    l2 = s2.len()
-
+    def complement(self:)
     dic = {"A":"T", "T":"A", "C":"G", "G":"C"}
     comp1 = [dic.get(n, n) for n in str1]
     comp2 = [dic.get(n, n) for n in str2]
 
-    rev1 = ''.join(reversed(str1))
-    rev2 = ''.join(reversed(str2))
+    def reversed(self):
+        reversed = self.strbases[::-1]
+        seq = Seq(reversed)
+        return seq
 
-    a1 = str1.count("A")
-    c1 = str1.count("C")
-    g1 = str1.count("G")
-    t1 = str1.count("T")
-    a2 = str2.count("A")
-    c2 = str2.count("C")
-    g2 = str2.count("G")
-    t2 = str2.count("T")
+
+    def counting(self, base):
+        a1 = str1.count("A")
+        c1 = str1.count("C")
+        g1 = str1.count("G")
+        t1 = str1.count("T")
+        a2 = str2.count("A")
+        c2 = str2.count("C")
+        g2 = str2.count("G")
+        t2 = str2.count("T")
 
     perca1 = round(a1 / l1, 2)
     percc1 = round(c1 / l1, 2)
