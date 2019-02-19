@@ -12,7 +12,7 @@ class Seq:
         return comple
 
     def reversed(self):
-        reverse = strbases[::-1]
+        reverse = self.strbases[::-1]
         seq = Seq(reverse)
         return seq
 
@@ -24,7 +24,7 @@ class Seq:
 
     def percentage(self, base):
         self.base = base
-        per = round(100.0 * self.strbases.count(base) / len(self.strbases), 2)
+        per = round(100.0 * self.strbases.count(base) / len(self.strbases), 1)
         return per
 
 

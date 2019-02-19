@@ -1,6 +1,6 @@
 # We are programing our first client
 
-from Seq import sequence
+from Seq import Seq
 
 import socket
 
