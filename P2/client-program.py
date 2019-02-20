@@ -1,8 +1,6 @@
 # We are programing our first client
-
-from Seq import Seq
-
 import socket
+from Seq2 import Seq
 
 while True:
 # We create a socket for communicating with the server
@@ -11,21 +9,20 @@ while True:
     print("Socket created")
 
     PORT = 8080
-    IP = "212.128.253.90" #My IP
+    IP = "192.168.1.38"
+
 
     file = input("Type a message: ")
-    rev = file.reversed(file)
-    comp = file.complement(rev)
+    seq = Seq(file)
+    rev = Seq.reversed(seq)
+    comp = Seq.complement(rev)
+    comp1 = comp.strbases
 
-# Connect to the server
     s.connect((IP ,PORT))
 
-    s.send(str.encode(comp))
+    s.send(str.encode(comp1))
 
-    msg = s.recv(2048).decode("utf-8")
-    print("MESSAGE FROM SERVER")
-    print(msg)
+    msg = s.recv(2048).decode('utf-8')
 
     s.close()
 
-    print("the end")
