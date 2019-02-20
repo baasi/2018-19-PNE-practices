@@ -7,13 +7,23 @@ class Seq:
         return len(self.strbases)
 
     def complement(self):
-        dic = {"A": "T", "T": "A", "C": "G", "G": "C"}
-        comple = [dic.get(n, n) for n in self.strbases]
-        return comple
+        word = ''
+        for letter in self.strbases:
+            self.strbases = self.strbases.upper()
+            if letter == 'A':
+                word += 'T'
+            elif letter == 'C':
+                word += 'G'
+            elif letter == 'G':
+                word += 'C'
+            elif letter == 'T':
+                word += 'A'
+        c = Seq(word)
+        return c
 
     def reversed(self):
-        reverse = strbases[::-1]
-        seq = Seq(reverse)
+        se = self.strbases[::-1]
+        seq = Seq(se)
         return seq
 
 
