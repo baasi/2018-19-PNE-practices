@@ -1,5 +1,5 @@
 import socket
-from Seq import Seq
+from Seq3 import Seq
 
 PORT = 8080
 IP = "192.168.1.38"
@@ -8,15 +8,13 @@ MAX_OPEN_REQUEST = 5
 
 def operate(se, op):
     print('Perfoming the following operation: ', op)
-    se = msg[0]
-    op = msg[1]
     if op == 'len':
         return se.length()
     elif op == 'complement':
-        return se.complement()
+            return se.complement().strbases
 
     elif op == 'reverse':
-        return se.reversed()
+        return se.reversed().strbases
 
     elif op == 'countA':
         return se.counting('A')
