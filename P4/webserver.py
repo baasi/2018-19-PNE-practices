@@ -2,9 +2,35 @@ import socket
 import termcolor
 
 # Change this IP to yours!!!!!
-IP = "212.128.253.90"
-PORT = 8080
+IP = "192.168.1.38"
 MAX_OPEN_REQUESTS = 5
+
+xd = input("Type a webpage:")
+if xd == "/":
+    PORT = 8081
+    f = "index.html"
+    with open(f, "r") as file:
+        content = file.read()
+        file.close()
+elif xd == "/blue":
+    PORT = 8082
+    f = "blue.html"
+    with open(f, "r") as file:
+        content = file.read()
+        file.close()
+elif xd == "/pink":
+    PORT = 8083
+    f = "pink.html"
+    with open(f, "r") as file:
+        content = file.read()
+        file.close()
+else:
+    PORT = 8084
+    f = "error.html"
+    with open(f, "r") as file:
+        content = file.read()
+        file.close()
+
 
 
 def process_client(cs):
@@ -20,11 +46,6 @@ def process_client(cs):
     termcolor.cprint(msg, 'green')
 
 
-    f = "index.html"
-    with open(f, "r") as file:
-        content = file.read()
-        file.close()
-
     status_line = "HTTP/1.1 200 ok\r\n"
 
     header = "Content type: text/html\r\n"
@@ -36,6 +57,7 @@ def process_client(cs):
 
     # Close the socket
     cs.close()
+    return PORT
 
 
 # MAIN PROGRAM
