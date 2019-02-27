@@ -3,34 +3,8 @@ import termcolor
 
 # Change this IP to yours!!!!!
 IP = "192.168.1.38"
+PORT = 8082
 MAX_OPEN_REQUESTS = 5
-
-xd = input("Type a webpage:")
-if xd == "/":
-    PORT = 8081
-    f = "index.html"
-    with open(f, "r") as file:
-        content = file.read()
-        file.close()
-elif xd == "/blue":
-    PORT = 8082
-    f = "blue.html"
-    with open(f, "r") as file:
-        content = file.read()
-        file.close()
-elif xd == "/pink":
-    PORT = 8083
-    f = "pink.html"
-    with open(f, "r") as file:
-        content = file.read()
-        file.close()
-else:
-    PORT = 8084
-    f = "error.html"
-    with open(f, "r") as file:
-        content = file.read()
-        file.close()
-
 
 
 def process_client(cs):
@@ -45,6 +19,24 @@ def process_client(cs):
     print("Request message: ")
     termcolor.cprint(msg, 'green')
 
+    ms = msg.splitlines()
+    ms = ms[0].lstrip("GET ").rstrip(" HTTP/1.1")
+    if ms == "":
+        with open("Index.html") as f:
+            content = f.read()
+        f.close()
+    elif ms == "/pink":
+        with open("Pink.html") as f:
+            content = f.read()
+        f.close()
+    elif ms == "/blue":
+        with open("Blue.html") as f:
+            content = f.read()
+        f.close()
+    else:
+        with open("Error.html") as f:
+            content = f.read()
+        f.close()
 
     status_line = "HTTP/1.1 200 ok\r\n"
 
