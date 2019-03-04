@@ -10,13 +10,9 @@ while True:
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     s.connect((IP, PORT))
     # Making the message separated
-    msg = "ATTGCTTAAATCTG\nlen"
-    msg = msg.split()
-
-    if msg != "":
-        continue
-    else:
-        msg = ""
+    msg = "ATTGCTTAAATCTG\nlen\ncountA"
+    if msg == "":
+        msg = "empty"
 
 
     s.send(str.encode(msg))

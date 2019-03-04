@@ -6,55 +6,66 @@ IP = "192.168.1.38"
 MAX_OPEN_REQUEST = 5
 
 
-def operate(se, op):
-    print('Perfoming the following operation: ', op)
-    if op == 'len':
-        return se.length()
-    elif op == 'complement':
-            return se.complement().strbases
-
-    elif op == 'reverse':
-        return se.reversed().strbases
-
-    elif op == 'countA':
-        return se.counting('A')
-
-    elif op == 'countC':
-        return se.counting('C')
-
-    elif op == 'countT':
-        return se.counting('T')
-
-    elif op == 'countG':
-        return se.counting('G')
-
-    elif op == 'percA':
-        return se.percentage('A')
-
-    elif op == 'percC':
-        return se.percentage('C')
-
-    elif op == 'percT':
-        return se.percentage('T')
-
-    elif op == 'percG':
-        return se.percentage('G')
-    else:
-        print("there was an error, not valid operation")
-
-
 def process_client(cs):
 
     # reading the message from the client
     msg = cs.recv(2048).decode("utf-8")
+    msg = msg.split('\n')
 
-    if msg == "":
-        response = "ALIVE"
-    else:
-        if len(set(se)) == 4:
-            response = "OK"
-        elif len(set(se)) != 4:
-            response = "Error, not valid sequence"
+    se = Seq(msg[0])
+    response = ""
+    ac = "ACTG"
+
+
+    if msg[0] == "asdf":
+        response += "EMPTY"
+        cs.send(str.encode(response))
+
+    nmbr = 0
+    for n in msg[0].upper():
+        if n in ac:
+            nmbr += 1
+    if nmbr == len(msg[0]):
+        response += "OK!"
+        response += "\n"
+    elif nmbr != len(msg[0]):
+        response += "ERROR"
+        cs.send(str.encode(response))
+
+
+
+    for i in msg[1:]:
+        if i == 'len':
+            response += se.len()
+        elif i == 'complement':
+                response += se.complement().strbases
+
+        elif i == 'reverse':
+            response += se.reversed().strbases
+
+        elif i == 'countA':
+            response += se.counting('A')
+
+        elif i == 'countC':
+            response += se.counting('C')
+
+        elif i == 'countT':
+            response += se.counting('T')
+
+        elif i == 'countG':
+            response += se.counting('G')
+
+        elif i == 'percA':
+            response += se.percentage('A')
+
+        elif i == 'percC':
+            response += se.percentage('C')
+
+        elif i == 'percT':
+            response += se.percentage('T')
+
+        elif i == 'percG':
+            response += se.percentage('G')
 
 
     # Sending the message back to the client
