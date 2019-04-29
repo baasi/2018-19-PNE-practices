@@ -25,40 +25,47 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
 
 
         contents = ""
-        if self.path == '/':
-            with open('index.html', 'r') as f:
-                for i in f:
-                    contents += i
-                    contents = str(contents)
-                self.send_response(200)
-                self.send_header('Content-Type', 'text/html')
-
-        else:
-            end = self.path.split("?")[0] #extraigo la peticion sin parametros
-            print ("End =>", end)
-            if end == '/listSpecies':
-                contents = self.handle_info_species()
-                self.send_response(200)
-                self.send_header('Content-Type', 'text/html')
-
-            elif end == '/karyotype':
-                contents = self.handle_info_assembly()
-                self.send_response(200)
-                self.send_header('Content-Type', 'text/html')
-
-
-            elif self.path == '/overlap/region/human/{}:{}-{}?feature=gene;feature=transcript;feature=cds;feature=exon':
-                contents = self.handle_overlap_region()
-                self.send_response(200)
-                self.send_header('Content-Type', 'text/plain')
-
-            else:
-                with open('error.html', 'r') as f:
+        try:
+            if self.path == '/':
+                with open('index.html', 'r') as f:
                     for i in f:
                         contents += i
                         contents = str(contents)
-                self.send_response(404)
-                self.send_header('Content-Type', 'text/html')
+                    self.send_response(200)
+                    self.send_header('Content-Type', 'text/html')
+
+
+            else:
+                end = self.path.split("?")[0]
+                print ("End =>", end)
+                if end == '/listSpecies':
+                        contents = self.handle_info_species()
+                        self.send_response(200)
+                        self.send_header('Content-Type', 'text/html')
+
+
+                elif end == '/karyotype':
+                    contents = self.handle_info_assembly()
+                    self.send_response(200)
+                    self.send_header('Content-Type', 'text/html')
+
+
+                elif self.path == '/overlap/region/human/{}:{}-{}?feature=gene;feature=transcript;feature=cds;feature=exon':
+                    contents = self.handle_overlap_region()
+                    self.send_response(200)
+                    self.send_header('Content-Type', 'text/plain')
+
+                else:
+                    with open('error.html', 'r') as f:
+                        for i in f:
+                            contents += i
+                            contents = str(contents)
+                    self.send_response(404)
+                    self.send_header('Content-Type', 'text/html')
+        except Exception:
+            self.send_response(404)
+            with open('hugeerror.html', 'r') as f:
+                contents = f.read()
 
 
         self.send_header("Content-Length", len(str.encode(str(contents))))
