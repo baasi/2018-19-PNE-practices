@@ -9,7 +9,7 @@ import requests
 PORT = 8000
 headers={ "Content-Type" : "application/json"}
 SERVER = "https://rest.ensembl.org"
-ENDPOINT = ["/info/species?", "/overlap/region/human/{}:{}-{}?feature=gene;feature=transcript;feature=cds;feature=exon", '/info/assembly']
+ENDPOINT = ["/info/species?", '/info/assembly']
 EPORT = 80
 
 socketserver.TCPServer.allow_reuse_address = True
@@ -50,10 +50,10 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
                     self.send_header('Content-Type', 'text/html')
 
 
-                elif self.path == '/overlap/region/human/{}:{}-{}?feature=gene;feature=transcript;feature=cds;feature=exon':
+                elif end == '/chromosomeLength':
                     contents = self.handle_overlap_region()
                     self.send_response(200)
-                    self.send_header('Content-Type', 'text/plain')
+                    self.send_header('Content-Type', 'text/html')
 
                 else:
                     with open('error.html', 'r') as f:
@@ -64,8 +64,12 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
                     self.send_header('Content-Type', 'text/html')
         except Exception:
             self.send_response(404)
-            with open('hugeerror.html', 'r') as f:
-                contents = f.read()
+            with open('error.html', 'r') as f:
+                for i in f:
+                    contents += i
+                    contents = str(contents)
+            self.send_response(404)
+            self.send_header('Content-Type', 'text/html')
 
 
         self.send_header("Content-Length", len(str.encode(str(contents))))
@@ -122,16 +126,19 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
 
         return contents
 
-        return d
+
 
     def handle_overlap_region(self):
         print("\nConnecting to server: {}:{}\n".format(SERVER, EPORT))
+        specie = self.path.split("=")[1].split("&")[0]
+        chromo = self.path.split("&")[1].split("=")[1]
+        print(chromo, specie)
 
         # Connect with the server
         con = http.client.HTTPConnection(SERVER, EPORT)
 
         # Send the request message
-        con.request("GET", "/overlap/region/human/{}:{}-{}?feature=gene;feature=transcript;feature=cds;feature=exon")
+        con.request("GET", "/info/assembly/")
 
         # Read the response message from server
         r1 = con.getresponse()
@@ -141,9 +148,34 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
 
         # Read the response's body
         d = r1.read().decode("utf-8")
-        print("CONTENT: ")
-        print(d)
-        return d
+
+        d = r1.json()
+        length_chromosome = None
+        for element in d["top_level_region"]:
+            if element["name"] == chromo:
+                length_chromosome = element["length"]
+        if length_chromosome == None:
+            contents = '<!DOCTYPE html><html lang="en" dir="ltr"><head>' \
+                       '<meta charset="UTF-8">' \
+                       '<title>ERROR</title>' \
+                       '</head>' \
+                       '<body style="background-color: red">' \
+                       '<h1>ERROR el nombre "' + chromo + '" no es válido.</h1>' \
+                        '<p>Here there are the websites available: </p>' \
+                        '<a href="/">[main server]</a></body></html>'
+        else:
+            contents = '<!DOCTYPE html> \
+                                            <html lang="en"> \
+                                            <head> \
+                                                <meta charset="UTF-8"> \
+                                                <title>LENGTH OF THE SELECTED CHROMOSOME</title> \
+                                            </head> \
+                                            <body style="background-color: lightblue;"> \
+                                            <body> \
+                                               The length of the chromosome is ' + length_chromosome + '. \
+                                            </body> \
+                                            </html>'
+        return contents
 
 
 
