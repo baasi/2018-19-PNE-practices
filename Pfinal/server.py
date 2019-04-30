@@ -12,6 +12,8 @@ SERVER = "https://rest.ensembl.org"
 ENDPOINT = ["/info/species", '/info/assembly']
 EPORT = 80
 
+TEST_REPORT = True
+
 socketserver.TCPServer.allow_reuse_address = True
 
 class TestHandler(http.server.BaseHTTPRequestHandler):
@@ -91,6 +93,7 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
         request = SERVER + ENDPOINT[0]
         r = requests.get(request, headers=headers)
         print("Sending request:", request)
+        escribir_en_fichero_test("request: " + request)
         d = r.json()
         #print("CONTENT: ")
         #print(d)
@@ -117,6 +120,7 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
         #print("Specie=", specie)
         request = SERVER + ENDPOINT[1] + "/" + specie
         print ("Sending request:", request)
+        escribir_en_fichero_test("request: " + request)
 
         r = requests.get(request, headers=headers)
         d = r.json()
@@ -153,6 +157,7 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
         # Send the request message
         request = SERVER + ENDPOINT[1] + "/" + specie
         print(request)
+        escribir_en_fichero_test("request: " + request)
         r = requests.get(request, headers=headers)
 
         d = r.json()
@@ -192,9 +197,10 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
         return contents
 
 def escribir_en_fichero_test(cadena):
-    f = open("test_report.txt", "a")
-    f.write(cadena + "\n")
-    f.close()
+    if TEST_REPORT:
+        f = open("test_report.txt", "a")
+        f.write(cadena + "\n")
+        f.close()
 
 
 Handler = TestHandler
