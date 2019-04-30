@@ -7,7 +7,7 @@ import http.client
 import requests
 
 PORT = 8000
-headers={ "Content-Type" : "application/json"}
+headers = {"Content-Type": "application/json"}
 SERVER = "https://rest.ensembl.org"
 ENDPOINT = ["/info/species", '/info/assembly']
 EPORT = 80
@@ -25,10 +25,10 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
         print("  Cmd: " + self.command)
         print("  Path: " + self.path)
 
-        escribir_en_fichero_test("--------------NUEVA PETICIÓN----------------")
-        escribir_en_fichero_test("Request line:" + self.requestline)
-        escribir_en_fichero_test("  Cmd: " + self.command)
-        escribir_en_fichero_test("  Path: " + self.path)
+        writing_report_test("--------------NEW REQUEST----------------")
+        writing_report_test("Request line:" + self.requestline)
+        writing_report_test("  Cmd: " + self.command)
+        writing_report_test("  Path: " + self.path)
 
 
         contents = ""
@@ -44,7 +44,7 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
 
             else:
                 end = self.path.split("?")[0]
-                escribir_en_fichero_test("  Endpoint: " + end)
+                writing_report_test("  Endpoint: " + end)
                 print ("End =>", end)
                 if end == '/listSpecies':
                         contents = self.handle_info_species()
@@ -59,7 +59,7 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
 
 
                 elif end == '/chromosomeLength':
-                    contents = self.handle_overlap_region()
+                    contents = self.handle_length()
                     print("CONTENTS FUERA:", contents)
                     self.send_response(200)
                     self.send_header('Content-Type', 'text/html')
@@ -93,15 +93,13 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
         request = SERVER + ENDPOINT[0]
         r = requests.get(request, headers=headers)
         print("Sending request:", request)
-        escribir_en_fichero_test("request: " + request)
+        writing_report_test("request: " + request)
         d = r.json()
-        #print("CONTENT: ")
-        #print(d)
 
-        escribir_en_fichero_test("RESPUESTA: " + str(d))
+        writing_report_test("RESPUESTA: " + str(d))
 
         contents = '<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><title>Species List</title></head>' \
-                   '<body><h1>List of species</h1><ol>'
+                   '<body style="background-color: cornflowerblue;"><h1>List of species</h1><ol>'
 
         for index in range(len(d['species'])):
             contents += "<li>"
@@ -114,29 +112,27 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
 
 
     def handle_info_assembly(self):
-        #http://rest.ensembl.org/info/assembly/homo_sapiens?
         specie = self.path.split("=")[1]
         specie = specie.replace("+", "_")
-        #print("Specie=", specie)
         request = SERVER + ENDPOINT[1] + "/" + specie
         print ("Sending request:", request)
-        escribir_en_fichero_test("request: " + request)
+        writing_report_test("request: " + request)
 
         r = requests.get(request, headers=headers)
         d = r.json()
         print("CONTENT: ")
         print(d)
 
-        escribir_en_fichero_test("Parametros: ")
-        escribir_en_fichero_test("   Specie: " + specie)
-        escribir_en_fichero_test("RESPUESTA: " + str(d))
+        writing_report_test("Parameters: ")
+        writing_report_test("   Specie: " + specie)
+        writing_report_test("ANSWER: " + str(d))
 
         contents = '<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><title>Karyotype of ' + specie + '</title></head>' \
-                   '<body><h1>Karyotype of ' + specie + '</h1><ol>'
+                   '<body style="background-color: turquoise;"><h1>Karyotype of ' + specie + '</h1><ol>'
 
         for index, elem in enumerate(d['karyotype']):
             contents += "<li>"
-            contents += elem #d['karyotype'][index]['common_name']
+            contents += elem
             contents += "</li>"
 
         contents += "</ol></body></html>"
@@ -145,7 +141,7 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
 
 
 
-    def handle_overlap_region(self):
+    def handle_length(self):
         print("\nConnecting to server: {}:{}\n".format(SERVER, EPORT))
         specie = self.path.split("=")[1].split("&")[0]
         specie = specie.replace("+","_")
@@ -157,17 +153,15 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
         # Send the request message
         request = SERVER + ENDPOINT[1] + "/" + specie
         print(request)
-        escribir_en_fichero_test("request: " + request)
+        writing_report_test("request: " + request)
         r = requests.get(request, headers=headers)
 
         d = r.json()
-        #print("CONTENT: ")
-        #print(d)
 
-        escribir_en_fichero_test("Parametros: ")
-        escribir_en_fichero_test("   Specie: " + specie)
-        escribir_en_fichero_test("   Chromo: " + chromo)
-        escribir_en_fichero_test("RESPUESTA: " + str(d))
+        writing_report_test("Parametros: ")
+        writing_report_test("   Specie: " + specie)
+        writing_report_test("   Chromo: " + chromo)
+        writing_report_test("RESPUESTA: " + str(d))
 
         length_chromosome = None
         for element in d["top_level_region"]:
@@ -182,24 +176,22 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
                        '<meta charset="UTF-8">' \
                        '<title>ERROR</title>' \
                        '</head>' \
-                       '<body style="background-color: red">' \
+                       '<body style="background-color: tomato">' \
                        '<h1>ERROR el nombre "' + chromo + '" no es válido.</h1>' \
                         '<p>Here there are the websites available: </p>' \
                         '<a href="/">[main server]</a></body></html>'
         else:
-            #contents = '<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><title>Lenght of chromo</title></head>' \
-            #       '<body><h1>Length = ' + str(length_chromosome) + '</h1><ol>'
             contents = '<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><title>Lenght of chromosomo ' + chromo + ' for specie ' + specie + '</title></head>' \
-                   '<body><h1>The length of the chromosome ' + chromo + ' is ' + str(length_chromosome) + '.</h1>'
+                   '<body><h1>The length of the chromosome ' + chromo + ' of the specie ' + specie + 'is ' + str(length_chromosome) + '.</h1>'
             contents += '</body></html>'
 
 
         return contents
 
-def escribir_en_fichero_test(cadena):
+def writing_report_test(info):
     if TEST_REPORT:
         f = open("test_report.txt", "a")
-        f.write(cadena + "\n")
+        f.write(info + "\n")
         f.close()
 
 
