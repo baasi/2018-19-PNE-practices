@@ -2,19 +2,19 @@
 <html lang="en" dir="ltr">
   <head>
     <meta charset="utf-8">
-    <title>FORM 2</title>
+    <title>welcome</title>
   </head>
   <body>
     <h3>MAIN PAGE</h3>
 
-    <form action="myserver" method="get">
-      Enter your sequence  <input type="text" name="msg">
+    <form action="get" method="get">
+      Sequence  <input type="text" name="msg">
       <br><br>
-      Calculate length:
+      Give length:
       <input type="checkbox" name="chk">
       <br><br>
-      Choose the base of operation:
-      <input type="radio" name="base" value="A" checked> A
+      Radio buttons:
+      <input type="radio" name="base" value="A"> A
       <input type="radio" name="base" value="C"> C
       <input type="radio" name="base" value="T"> T
       <input type="radio" name="base" value="G"> G
@@ -26,7 +26,8 @@
         <option value="perc">Percentage</option>
       </select>
        <br>
-        <input type="submit"/>
+        <br>
+        <input type="submit" value="SEND REQUEST"/>
     </form>
 
   </body>
