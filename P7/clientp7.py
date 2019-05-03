@@ -1,6 +1,5 @@
 
 import http.client
-import termcolor
 import json
 from Seq import Seq
 import collections
